@@ -1,5 +1,5 @@
 import { addDays } from "./date.js"
-import { onTrypTypeChange, isTrypTypeOneWay } from "./trip.js"
+import { onTripTypeChange, isTripTypeOneWay } from "./trip.js"
 
 
 
@@ -14,23 +14,42 @@ function isBeforeTravelDate(date) {
 //implement return date
 let returnDate = document.getElementById("returnDate")
 returnDate.addEventListener("change", onReturnDateChange)
-// returnDate.disabled = isTrypTypeOneWay()
+returnDate.disabled = isTripTypeOneWay()
+
+
 
 //implement reset 
 let reset = document.getElementById("reset")
-//implement submint button
+reset.addEventListener("click", () => {
+  travelDate.value = ""
+  returnDate.value = ""
+  tripType.value = "oneWay"
+  returnDate.disabled = isTripTypeOneWay()
+})
+
+
+//implement submit button
 let submit = document.getElementById("submit")
+submit.addEventListener("click", () => {
+  if (isTripTypeOneWay()) {
+    alert(`Travel date: ${travelDate.value}`)
+  } else {
+    alert(`Travel date: ${travelDate.value} \nReturn date: ${returnDate.value}`)
+  }
+})
 
 function mustNotBeBeforeToday(el) {
-  let today = new Date()
-  if (el.valueAsDate <= today) {
-    el.valueAsDate = today.toISOString().slice(0, 10)
+  if (el.valueAsDate < new Date()) {
+    el.valueAsDate = new Date()
   }
 }
 
-// on tryptype change disable return date if one way
-onTrypTypeChange((type) => {
-  returnDate.disabled = isTrypTypeOneWay()
+// on Triptype change disable return date if one way
+onTripTypeChange((type) => {
+  returnDate.disabled = isTripTypeOneWay()
+  if (isTripTypeOneWay()) {
+    returnDate.value = ""
+  }
 })
 
 function onTravelDateChange(event) {
@@ -45,76 +64,3 @@ function onReturnDateChange(event) {
     event.target.valueAsDate = addDays(travelDate.valueAsDate, 1) 
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let defaultTrip = document.getElementById("tripType")
-// if (defaultTrip.value == "oneWay") {
-//     document.getElementById("returnDate").disabled=true;
-//   }
-
-// document.getElementById("tripType").addEventListener("change", ifChangedBetween);
-
-// function ifChangedBetween() {
-//   var x = document.getElementById("tripType");
-//   if (x.value == "oneWay") {
-//     document.getElementById("returnDate").disabled=true;
-//   }
-//     else {
-//       document.getElementById("returnDate").disabled=false;
-//     }
-// }
-
-// let inputDate = document.getElementById("date").addEventListener("change", ifChangedDate);
-// let inputReturn = document.getElementById("returnDate").addEventListener("change", ifChangedReturn);
-// let submitButton = document.getElementById("submit").addEventListener("click", ifClickedSubmit);
-// let resetButton = document.getElementById("reset").addEventListener("click", ifClickedReset);
-
-// function ifChangedDate() {
-//   console.log(date.value)
-// }
-
-// function ifChangedReturn() {
-//   console.log(returnDate.value)
-// }
-// function ifClickedSubmit() {
-//     if (date.value > returnDate.value) {
-//         alert("Return date must be after departure date") // aici daca nu am pus nimic in return date, imi da alerta asta cand as vrea sa apara doar departure date(in cazul oneWay)
-//     // nu cred ca inteleg foarte bine typeOf date.value si returnDate.value , am incercat sa caut ceva dar nu am idei
-//     // ma gandeam ca poate se face cumva cu un parse? dar nu stiu cum
-   
-//     }
-   
-//     else{
-//     alert("Departure date: " + date.value + "\nReturn date: " + returnDate.value) // functioneaza
-// }
-// // imi trebuie un else if care sa zica invalid daca nu am selectat nici o data si apas submit
-// // sau cumva sa fac butonul de submit sa fie unclickable atat timp cat nu am selectat nici o data
-// }
-
-// function ifClickedReset() {
-//     date.value = "";
-//     returnDate.value = "";
-//     tripType.value = "oneWay";
-//     document.getElementById("returnDate").disabled=true;
-// }
-
-
